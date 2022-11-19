@@ -1,5 +1,9 @@
 import java.util.Random;
 
+import musicservice.FlyweightMusicService;
+import musicservice.MusicService;
+import musicservice.NoFlyweightMusicService;
+
 public class MusicSimulation {
     
     private static String getRandGenre(Random randObj) {
@@ -22,9 +26,18 @@ public class MusicSimulation {
     }
 
     public static void main(String[] args) {
-        MusicService musicService = new MusicService();
+        MusicService musicService;
+
+        // Argument of "no-flyweight" results in the program using an unoptimized music service
+        if(args.length > 0 && args[0].toLowerCase().equals("no-flyweight")) {
+            musicService = new NoFlyweightMusicService();
+        }
+        else {
+            musicService = new FlyweightMusicService();
+        }
+
         Random randObj = new Random();
-        int numSongs = 1000000;
+        int numSongs = 20000000;
         long startTime = System.currentTimeMillis();
 
         for(int i = 1; i <= numSongs; i++) {
@@ -34,7 +47,6 @@ public class MusicSimulation {
         System.out.println("Total time taken to upload "+ numSongs 
                 + " songs: " + (System.currentTimeMillis() - startTime)
                 + " milliseconds");
-        // musicService.printSongs();
     }
 
 }
